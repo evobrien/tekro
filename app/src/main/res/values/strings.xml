@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Git Browser</string>
+    <string name="grid">grid</string>
+    <string name="list">list</string>
+    <string name="search">Search</string>
+    <string name="user_image">User Image</string>
+</resources>
