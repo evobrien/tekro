@@ -14,7 +14,6 @@ interface UserRepository {
 class UserRepositoryImpl @Inject constructor(private val searchUserApi: SearchUserApi):UserRepository{
     override suspend fun getUsers(name:String):List<UserSummary> {
         val response=searchUserApi.getUsers(name)
-        Log.v("result",response.toString())
-        return ArrayList<UserSummary>()
+        return response.items
     }
 }

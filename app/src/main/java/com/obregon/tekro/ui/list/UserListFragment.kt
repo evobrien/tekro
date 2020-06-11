@@ -4,19 +4,28 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.obregon.tekro.R
-import com.obregon.tekro.data.response.UserSummary
 import com.obregon.tekro.di.TekroViewModelFactory
+import com.obregon.tekro.ui.model.User
 import dagger.android.support.DaggerFragment
-import timber.log.Timber
+import kotlinx.android.synthetic.main.user_list_fragment.*
+import okhttp3.internal.notifyAll
 import javax.inject.Inject
 
 class UserListFragment : DaggerFragment(){
 
-    //private lateinit var toolbar: Toolbar;
-    @Inject lateinit var viewModelFactory: TekroViewModelFactory;
+    @Inject lateinit var viewModelFactory: TekroViewModelFactory
     private val userListViewModel by viewModels<UserListViewModel> { viewModelFactory }
+
+    private enum class LayoutManagerType {
+        GRID_LAYOUT_MANAGER, LINEAR_LAYOUT_MANAGER
+    }
+
+    private var currentLayoutManagerType= LayoutManagerType.LINEAR_LAYOUT_MANAGER
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +38,6 @@ class UserListFragment : DaggerFragment(){
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.user_list_fragment, container, false)
-        /*val rootView: View = inflater.inflate(R.layout.user_list_fragment, container, false)
-        toolbar = rootView.findViewById(R.id.toolbar_user_list) as Toolbar
-        val activityCompat=this.activity as AppCompatActivity
-        activityCompat.setSupportActionBar(toolbar)
-        return rootView*/
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //toolbar.inflateMenu(R.menu.user_list_menu)
-       // val menu = toolbar.menu
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -50,10 +48,57 @@ class UserListFragment : DaggerFragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         userListViewModel.getUsers("Tom")
-        userListViewModel.users.observe(viewLifecycleOwner, Observer { print(it)})
+        userListViewModel.users.observeForever {  layoutList(it)}
     }
 
-    private fun print(summary:List<UserSummary>){
-        Log.d("Summary",summary.toString())
+    private fun print(users:List<User>){
+        Log.d("UserLog",users.toString())
+    }
+
+    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var adapter: UserListAdapter
+
+    private fun layoutList(users:List<User>){
+        print(users)
+        layoutManager = getLayoutManager()
+        user_list.layoutManager=layoutManager
+        adapter = UserListAdapter(getCellLayoutFile(),users)
+        user_list.adapter = adapter
+
+    }
+
+    private fun getCellLayoutFile():Int {
+        return when (currentLayoutManagerType) {
+            LayoutManagerType.GRID_LAYOUT_MANAGER -> {
+                R.layout.user_list_gid_cell
+            }
+            else -> {
+                R.layout.user_list_cell
+            }
+        }
+    }
+
+    private fun getLayoutManager():LinearLayoutManager {
+        return when (currentLayoutManagerType) {
+            LayoutManagerType.GRID_LAYOUT_MANAGER -> {
+                GridLayoutManager(this.context, 3)
+            }
+            else -> {
+                LinearLayoutManager(this.context)
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_grid->{
+                this.currentLayoutManagerType=LayoutManagerType.GRID_LAYOUT_MANAGER
+            }
+            else->{
+                this.currentLayoutManagerType=LayoutManagerType.LINEAR_LAYOUT_MANAGER
+            }
+        }
+        userListViewModel.users.value?.let { layoutList(it) }
+        return true
     }
 }
