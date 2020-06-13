@@ -11,7 +11,9 @@ import coil.api.load
 import com.obregon.tekro.R
 import com.obregon.tekro.ui.model.User
 
-class UserListAdapter(var cellLayoutFile:Int, private val users:List<User>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class UserListAdapter(var cellLayoutFile:Int,
+                      private val users:List<User>,
+                      private val itemClickListener: (User) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -21,13 +23,10 @@ class UserListAdapter(var cellLayoutFile:Int, private val users:List<User>) : Re
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val listHolder=(holder as ListViewHolder)
-        if(this.cellLayoutFile== R.layout.user_list_gid_cell){
-            listHolder.tvUserName.visibility= View.GONE
-        }else{
-            listHolder.tvUserName.text=users.get(position).name
-            listHolder.tvUserName.visibility= View.VISIBLE
-        }
-        listHolder.ivUserImage.load(users.get(position).avatar)
+        val user= users[position]
+        listHolder.tvUserName.text=user.name
+        listHolder.ivUserImage.load(user.avatar)
+        listHolder.itemView.setOnClickListener { itemClickListener(user) }
     }
 
     override fun getItemCount(): Int {
@@ -35,14 +34,8 @@ class UserListAdapter(var cellLayoutFile:Int, private val users:List<User>) : Re
     }
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var ivUserImage:ImageView
-        var tvUserName:TextView
-
-        init{
-            ivUserImage=itemView.findViewById(R.id.iv_user_image)
-            tvUserName =itemView.findViewById(R.id.tv_user_name)
-        }
-
+        var ivUserImage:ImageView = itemView.findViewById(R.id.iv_user_image)
+        var tvUserName:TextView = itemView.findViewById(R.id.tv_user_name)
     }
 
 }

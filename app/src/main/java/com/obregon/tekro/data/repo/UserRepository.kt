@@ -1,14 +1,13 @@
 package com.obregon.tekro.data.repo
 
-import android.util.Log
 import com.obregon.tekro.data.network.SearchUserApi
-import com.obregon.tekro.data.response.SearchUserResponse
+import com.obregon.tekro.data.response.UserDetail
 import com.obregon.tekro.data.response.UserSummary
 import javax.inject.Inject
-import javax.inject.Singleton
 
 interface UserRepository {
     suspend fun getUsers(name:String):List<UserSummary>
+    suspend fun getUser(loginName:String): UserDetail
 }
 
 class UserRepositoryImpl @Inject constructor(private val searchUserApi: SearchUserApi):UserRepository{
@@ -16,4 +15,9 @@ class UserRepositoryImpl @Inject constructor(private val searchUserApi: SearchUs
         val response=searchUserApi.getUsers(name)
         return response.items
     }
+
+    override suspend fun getUser(loginName:String): UserDetail {
+       return searchUserApi.getUser(loginName)
+    }
+
 }

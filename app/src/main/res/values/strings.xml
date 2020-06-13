@@ -4,4 +4,8 @@
     <string name="list">list</string>
     <string name="search">Search</string>
     <string name="user_image">User Image</string>
+    <string name="public_repos">Public Repos:</string>
+    <string name="public_gists">Public Gists:</string>
+    <string name="followers">Followers:</string>
+    <string name="following">Following:</string>
 </resources>

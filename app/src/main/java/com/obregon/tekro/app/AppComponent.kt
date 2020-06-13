@@ -12,7 +12,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, AndroidSupportInjectionModule::class,UserListModule::class,UserDetailModule::class])
+@Component(modules = [AppModule::class, AndroidSupportInjectionModule::class,NetworkModule::class,UserListModule::class,UserDetailModule::class])
 interface AppComponent : AndroidInjector<GitSearchApplication> {
     @Component.Factory
     interface Factory {
