@@ -19,13 +19,12 @@ class UserDetailFragment: DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: TekroViewModelFactory
     private val viewModel by viewModels<UserDetailViewModel> { viewModelFactory }
-    private lateinit var user: User
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         user= this.arguments?.getParcelable<User>("USER") as User
-        Log.d("userdetail- user",user.toString())
     }
 
     override fun onCreateView(
@@ -38,13 +37,12 @@ class UserDetailFragment: DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.getUser(user.name)
+        user?.name?.let { viewModel.getUser(it) }
         viewModel.users.observeForever { layout(it)}
 
     }
 
     private fun layout(user: UserDetails){
-        Log.d("userdetail- layout",user.toString())
         user_avatar.load(user.avatar)
         user_name.text=user.displayName
         public_repos.text=user.numPublicRepos.toString()

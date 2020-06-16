@@ -7,11 +7,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.obregon.tekro.R
 import com.obregon.tekro.di.TekroViewModelFactory
 import com.obregon.tekro.ui.detail.UserDetailFragment
 import com.obregon.tekro.ui.model.User
+import com.obregon.tekro.ui.utils.RecyclerTouchHelperCallback
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.user_list_fragment.*
 import javax.inject.Inject
@@ -57,15 +59,20 @@ class UserListFragment : DaggerFragment(){
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: UserListAdapter
 
+
     private fun layoutList(users:List<User>){
         print(users)
         layoutManager = getLayoutManager()
         user_list.layoutManager=layoutManager
-        adapter = UserListAdapter(getCellLayoutFile(),users, this::onClickItem)
+        adapter = UserListAdapter(getCellLayoutFile(),users, this::onClickRecyclerListItem)
         user_list.adapter = adapter
+
+        val callback=RecyclerTouchHelperCallback(adapter);
+        val itemTouchHelper=ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(this.user_list)
     }
 
-    private fun onClickItem(user:User){
+    private fun onClickRecyclerListItem(user:User){
         Log.d("USER",user.toString())
 
         val args=Bundle()
@@ -73,7 +80,7 @@ class UserListFragment : DaggerFragment(){
         val userDetailFragment=UserDetailFragment()
         userDetailFragment.arguments=args
         activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.root,userDetailFragment,"UserDetailsFragment")
+            ?.add(R.id.root,userDetailFragment,"UserDetailsFragment")
             ?.addToBackStack("UserDetailsFragment")
             ?.commit()
     }
@@ -129,7 +136,6 @@ class UserListFragment : DaggerFragment(){
             }
 
         })
-
     }
 
 }

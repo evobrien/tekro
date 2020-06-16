@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setInitialLayout(){
         this.supportFragmentManager.beginTransaction()
-            .add(R.id.root,UserListFragment(),"UserListFragment")
+            .replace(R.id.root,UserListFragment(),"UserListFragment")
             .commit()
     }
 }
