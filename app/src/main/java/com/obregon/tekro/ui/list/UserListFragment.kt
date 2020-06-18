@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.user_list_fragment.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class UserListFragment : DaggerFragment(),OnStartDragListener, LoadMoreCallback {
+class UserListFragment : DaggerFragment(),LoadMoreCallback {
 
     @Inject lateinit var viewModelFactory: TekroViewModelFactory
     private val userListViewModel by viewModels<UserListViewModel> { viewModelFactory }
@@ -160,23 +160,10 @@ class UserListFragment : DaggerFragment(),OnStartDragListener, LoadMoreCallback 
         super.onSaveInstanceState(outState)
     }
 
-    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
-        TODO("Not yet implemented")
-    }
-
     override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
         Timber.d("Boundary ... Load more")
         userListViewModel.loadMore()
     }
 
 
-}
-
-interface OnStartDragListener {
-    /**
-     * Called when a view is requesting a start of a drag.
-     *
-     * @param viewHolder The holder of the view to drag.
-     */
-    fun onStartDrag(viewHolder: RecyclerView.ViewHolder?)
 }
