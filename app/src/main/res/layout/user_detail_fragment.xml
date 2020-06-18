@@ -3,17 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/double_padding"
     android:background="@android:color/white"
     >
     <ImageView
         android:id="@+id/user_avatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/list_image_size"
+        android:layout_height="@dimen/list_image_size"
         android:contentDescription="@string/user_image" />
     <TextView android:id="@+id/user_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_text_size"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,10 +25,12 @@
         android:layout_height="wrap_content"
         android:labelFor="@+id/public_repos"
         android:text="@string/public_repos"
+        android:textSize="@dimen/list_text_size"
         />
     <TextView android:id="@+id/public_repos"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_text_size"/>
     </LinearLayout>
 
     <LinearLayout
@@ -39,10 +42,12 @@
         android:layout_height="wrap_content"
         android:labelFor="@+id/public_gists"
         android:text="@string/public_gists"
+        android:textSize="@dimen/list_text_size"
         />
     <TextView android:id="@+id/public_gists"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_text_size"/>
     </LinearLayout>
 
     <LinearLayout
@@ -54,10 +59,12 @@
         android:layout_height="wrap_content"
         android:labelFor="@+id/num_followers"
         android:text="@string/followers"
+        android:textSize="@dimen/list_text_size"
         />
     <TextView android:id="@+id/num_followers"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_text_size"/>
     </LinearLayout>
 
     <LinearLayout
@@ -69,9 +76,11 @@
         android:layout_height="wrap_content"
         android:labelFor="@+id/num_following"
         android:text="@string/following"
+        android:textSize="@dimen/list_text_size"
         />
     <TextView android:id="@+id/num_following"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/list_text_size"/>
     </LinearLayout>
 </LinearLayout>

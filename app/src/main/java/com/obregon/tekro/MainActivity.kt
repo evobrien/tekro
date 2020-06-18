@@ -10,12 +10,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupToolbar()
         setInitialLayout()
     }
-
+    private fun setupToolbar(){
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        //supportActionBar?.setLogo(R.mipmap.ic_launcher)
+        //supportActionBar?.setDisplayUseLogoEnabled(true)
+    }
     private fun setInitialLayout(){
         this.supportFragmentManager.beginTransaction()
-            .replace(R.id.root,UserListFragment(),"UserListFragment")
+            .replace(R.id.content,UserListFragment(),"UserListFragment")
+            .addToBackStack("UserListFragment")
             .commit()
     }
 }

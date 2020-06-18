@@ -9,16 +9,20 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.obregon.tekro.R
 import com.obregon.tekro.di.TekroViewModelFactory
 import com.obregon.tekro.ui.detail.UserDetailFragment
 import com.obregon.tekro.ui.model.User
-import com.obregon.tekro.ui.utils.RecyclerTouchHelperCallback
+import com.obregon.tekro.ui.utils.EndlessRecyclerViewScrollListener
+import com.obregon.tekro.ui.utils.LoadMoreCallback
+import com.obregon.tekro.ui.utils.SwipeAndDragHelper
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.user_list_fragment.*
+import timber.log.Timber
 import javax.inject.Inject
 
-class UserListFragment : DaggerFragment(){
+class UserListFragment : DaggerFragment(),OnStartDragListener, LoadMoreCallback {
 
     @Inject lateinit var viewModelFactory: TekroViewModelFactory
     private val userListViewModel by viewModels<UserListViewModel> { viewModelFactory }
@@ -28,6 +32,8 @@ class UserListFragment : DaggerFragment(){
     }
 
     private var currentLayoutManagerType= LayoutManagerType.LINEAR_LAYOUT_MANAGER
+    private val KEY_SEARCH_BAR_CONTENT:String="KEY_SEARCH_BAR_CONTENT"
+    private val KEY_CUR_LIST_POS:String="KEY_CUR_LIST_POS"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +48,12 @@ class UserListFragment : DaggerFragment(){
         return inflater.inflate(R.layout.user_list_fragment, container, false)
     }
 
+    private lateinit var searchItem:MenuItem
+    private lateinit var searchView: SearchView
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.user_list_menu, menu)
+        searchItem= menu.findItem(R.id.app_bar_search)
+        searchView= searchItem.actionView as SearchView
         setupSearchView(menu)
     }
 
@@ -53,7 +63,7 @@ class UserListFragment : DaggerFragment(){
     }
 
     private fun print(users:List<User>){
-        Log.d("UserLog",users.toString())
+        Timber.d("Users: $users")
     }
 
     private lateinit var layoutManager: LinearLayoutManager
@@ -65,23 +75,25 @@ class UserListFragment : DaggerFragment(){
         layoutManager = getLayoutManager()
         user_list.layoutManager=layoutManager
         adapter = UserListAdapter(getCellLayoutFile(),users, this::onClickRecyclerListItem)
+        val swipeAndDragHelper = SwipeAndDragHelper(adapter)
+        val touchHelper = ItemTouchHelper(swipeAndDragHelper)
+        adapter.setTouchHelper(touchHelper)
         user_list.adapter = adapter
+        touchHelper.attachToRecyclerView(this.user_list)
+        val scrollListener=EndlessRecyclerViewScrollListener(layoutManager,this)
+        user_list.addOnScrollListener(scrollListener)
+        //user_list.setHasFixedSize(true);
 
-        val callback=RecyclerTouchHelperCallback(adapter);
-        val itemTouchHelper=ItemTouchHelper(callback)
-        itemTouchHelper.attachToRecyclerView(this.user_list)
     }
 
     private fun onClickRecyclerListItem(user:User){
-        Log.d("USER",user.toString())
-
         val args=Bundle()
         args.putParcelable("USER",user)
         val userDetailFragment=UserDetailFragment()
         userDetailFragment.arguments=args
         activity?.supportFragmentManager?.beginTransaction()
-            ?.add(R.id.root,userDetailFragment,"UserDetailsFragment")
-            ?.addToBackStack("UserDetailsFragment")
+            ?.replace(R.id.content,userDetailFragment,"UserDetailFragment")
+            ?.addToBackStack("UserDetailFragment")
             ?.commit()
     }
 
@@ -121,8 +133,6 @@ class UserListFragment : DaggerFragment(){
     }
 
     private fun setupSearchView(menu:Menu){
-        val searchItem= menu.findItem(R.id.app_bar_search)
-        val searchView:SearchView= searchItem.actionView as SearchView
         searchView.queryHint = "Search by user name"
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
 
@@ -131,6 +141,7 @@ class UserListFragment : DaggerFragment(){
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
+                lastQuery=query
                 userListViewModel.getUsers(query)
                 return true
             }
@@ -138,4 +149,34 @@ class UserListFragment : DaggerFragment(){
         })
     }
 
+    private var lastQuery:String =""
+    private var currentPos:Int=0
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(KEY_SEARCH_BAR_CONTENT,lastQuery)
+        if(user_list.childCount>0){
+            currentPos= (user_list.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        }
+        outState.putInt(KEY_CUR_LIST_POS,currentPos)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+        Timber.d("Boundary ... Load more")
+        userListViewModel.loadMore()
+    }
+
+
+}
+
+interface OnStartDragListener {
+    /**
+     * Called when a view is requesting a start of a drag.
+     *
+     * @param viewHolder The holder of the view to drag.
+     */
+    fun onStartDrag(viewHolder: RecyclerView.ViewHolder?)
 }

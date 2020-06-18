@@ -13,6 +13,7 @@ import com.obregon.tekro.ui.model.User
 import com.obregon.tekro.ui.model.UserDetails
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.user_detail_fragment.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class UserDetailFragment: DaggerFragment() {
@@ -43,6 +44,7 @@ class UserDetailFragment: DaggerFragment() {
     }
 
     private fun layout(user: UserDetails){
+        Timber.d("UserDetailFragment layout-> $user")
         user_avatar.load(user.avatar)
         user_name.text=user.displayName
         public_repos.text=user.numPublicRepos.toString()

@@ -19,4 +19,8 @@ class UserListViewModel @Inject constructor(private val userRepository: UserRepo
         }
     }
 
+    fun loadMore(){
+
+    }
+
 }

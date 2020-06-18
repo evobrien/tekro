@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="horizontal">
+    android:padding="@dimen/standard_padding"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground">
     <ImageView
         android:id="@+id/iv_user_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/user_image" />
+        android:layout_width="@dimen/list_image_size"
+        android:layout_height="@dimen/list_image_size"
+        android:contentDescription="@string/user_image"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:textSize="@dimen/list_text_size"
+        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginRight="@dimen/standard_margin"
         android:layout_gravity="center_vertical"
-        />
+        android:layout_toRightOf="@id/iv_user_image"
+        android:layout_toEndOf="@id/iv_user_image" />
 
-
-</LinearLayout>
+    <ImageView
+        android:id="@+id/handle"
+        android:layout_width="?listPreferredItemHeight"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_reorder"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="Reorder handle" />
+</RelativeLayout>
