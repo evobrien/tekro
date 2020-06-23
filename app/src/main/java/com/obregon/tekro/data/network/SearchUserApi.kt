@@ -16,4 +16,7 @@ interface SearchUserApi{
 
     @GET("/users/{alias}")
     suspend fun getUser(@Path("alias")loginAlias:String): UserDetail
+
+    @GET("/search/users")
+    suspend fun getUserByPage(@Query("q")q:String,@Query("page")page:Int): SearchUserResponse
 }
