@@ -1,25 +1,18 @@
 package com.obregon.tekro.app
 
-import android.content.Context
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.obregon.tekro.data.network.SearchUserApi
 import com.obregon.tekro.data.repo.UserRepository
 import com.obregon.tekro.data.repo.UserRepositoryImpl
 import dagger.Module
 import dagger.Provides
-import okhttp3.Cache
-import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
-
+@InstallIn(ApplicationComponent::class)
 @Module
-class AppModule{
+object AppModule{
 
     @Singleton
     @Provides

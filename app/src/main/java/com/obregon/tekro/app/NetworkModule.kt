@@ -3,6 +3,9 @@ package com.obregon.tekro.app
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,8 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
+@InstallIn(ApplicationComponent::class)
 @Module
-class NetworkModule {
+object NetworkModule {
     @Singleton
     @Provides
     fun providesRetrofit(@Named("ApiUrl") apiUrl:String, client: OkHttpClient): Retrofit {
@@ -31,6 +35,7 @@ class NetworkModule {
         return "https://api.github.com"
     }
 
+    @Singleton
     @Provides
     fun provideHttpClient(interceptor: Interceptor, cache: Cache): OkHttpClient =
         OkHttpClient
@@ -41,6 +46,7 @@ class NetworkModule {
             .build()
 
 
+    @Singleton
     @Provides
     fun provideInterceptor(): Interceptor {
         return  HttpLoggingInterceptor().apply {
@@ -50,5 +56,5 @@ class NetworkModule {
 
 
     @Provides
-    fun provideCache(context: Context): Cache = Cache(context.cacheDir, 5 * 1024 * 1024)
+    fun provideCache(@ApplicationContext context: Context): Cache = Cache(context.cacheDir, 5 * 1024 * 1024)
 }

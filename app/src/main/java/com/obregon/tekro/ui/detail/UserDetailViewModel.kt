@@ -1,20 +1,18 @@
 package com.obregon.tekro.ui.detail
 
-import android.util.Log
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.obregon.tekro.data.repo.UserRepository
-import com.obregon.tekro.ui.model.User
 import com.obregon.tekro.ui.model.UserDetails
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-class UserDetailViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel(){
+class UserDetailViewModel @ViewModelInject constructor(private val userRepository: UserRepository) : ViewModel(){
     private var _user= MutableLiveData<UserDetails>()
-    var users:LiveData<UserDetails> =_user
+    var users: LiveData<UserDetails> =_user
 
     fun getUser(name:String){
         Timber.d("name is->$name")

@@ -5,27 +5,27 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.obregon.tekro.R
-import com.obregon.tekro.di.TekroViewModelFactory
 import com.obregon.tekro.ui.detail.UserDetailFragment
 import com.obregon.tekro.ui.model.User
 import com.obregon.tekro.ui.utils.EndlessRecyclerViewScrollListener
 import com.obregon.tekro.ui.utils.LoadMoreCallback
 import com.obregon.tekro.ui.utils.SwipeAndDragHelper
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.user_list_fragment.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class UserListFragment : DaggerFragment(),LoadMoreCallback {
+@AndroidEntryPoint
+class UserListFragment : Fragment(),LoadMoreCallback {
 
-    @Inject lateinit var viewModelFactory: TekroViewModelFactory
-    private val userListViewModel by viewModels<UserListViewModel> { viewModelFactory }
+    private val userListViewModel:UserListViewModel by viewModels()
 
     private enum class LayoutManagerType {
         GRID_LAYOUT_MANAGER, LINEAR_LAYOUT_MANAGER
@@ -54,7 +54,7 @@ class UserListFragment : DaggerFragment(),LoadMoreCallback {
         inflater.inflate(R.menu.user_list_menu, menu)
         searchItem= menu.findItem(R.id.app_bar_search)
         searchView= searchItem.actionView as SearchView
-        setupSearchView(menu)
+        setupSearchView()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -132,7 +132,7 @@ class UserListFragment : DaggerFragment(),LoadMoreCallback {
         return true
     }
 
-    private fun setupSearchView(menu:Menu){
+    private fun setupSearchView(){
         searchView.queryHint = "Search by user name"
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
 

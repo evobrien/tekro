@@ -58,15 +58,15 @@ class EndlessRecyclerViewScrollListener constructor(val layoutManager: RecyclerV
         val totalItemCount =layoutManager.itemCount
         if (layoutManager is StaggeredGridLayoutManager) {
             val lastVisibleItemPositions =
-                (layoutManager as StaggeredGridLayoutManager).findLastVisibleItemPositions(null)
+                layoutManager.findLastVisibleItemPositions(null)
             // get maximum element within the list
             lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions)
         } else if (layoutManager is GridLayoutManager) {
             lastVisibleItemPosition =
-                (layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+                layoutManager.findLastVisibleItemPosition()
         } else if (layoutManager is LinearLayoutManager) {
             lastVisibleItemPosition =
-                (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                layoutManager.findLastVisibleItemPosition()
         }
 
         // If the total item count is zero and the previous isn't, assume the

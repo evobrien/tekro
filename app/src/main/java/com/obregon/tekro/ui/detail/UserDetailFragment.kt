@@ -1,25 +1,24 @@
 package com.obregon.tekro.ui.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.api.load
 import com.obregon.tekro.R
-import com.obregon.tekro.di.TekroViewModelFactory
 import com.obregon.tekro.ui.model.User
 import com.obregon.tekro.ui.model.UserDetails
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.user_detail_fragment.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class UserDetailFragment: DaggerFragment() {
-    @Inject
-    lateinit var viewModelFactory: TekroViewModelFactory
-    private val viewModel by viewModels<UserDetailViewModel> { viewModelFactory }
+@AndroidEntryPoint
+class UserDetailFragment: Fragment() {
+
+    private val viewModel:UserDetailViewModel by viewModels()
     private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

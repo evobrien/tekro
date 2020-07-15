@@ -1,5 +1,6 @@
 package com.obregon.tekro.app
 
+/*
 import android.content.Context
 import com.obregon.tekro.MainActivity
 import com.obregon.tekro.ui.detail.UserDetailModule
@@ -18,4 +19,4 @@ interface AppComponent : AndroidInjector<GitSearchApplication> {
     interface Factory {
         fun create(@BindsInstance applicationContext: Context): AppComponent
     }
-}
+}*/

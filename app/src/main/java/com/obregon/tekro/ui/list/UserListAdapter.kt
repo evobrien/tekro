@@ -46,7 +46,7 @@ class UserListAdapter(var cellLayoutFile:Int,
             ivUserImage.load(user.avatar)
             itemView.setOnClickListener { itemClickListener(user) }
             if(recyclerView.layoutManager !is  GridLayoutManager){
-                handle?.setOnTouchListener { v, event ->
+                handle?.setOnTouchListener { _, event ->
                     if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                         touchHelper?.startDrag(this)
                     }

@@ -1,5 +1,6 @@
 package com.obregon.tekro.ui.list
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.obregon.tekro.data.repo.UserRepository
 import com.obregon.tekro.data.response.UserSummary
@@ -7,7 +8,7 @@ import com.obregon.tekro.ui.model.User
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UserListViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel(){
+class UserListViewModel @ViewModelInject constructor(private val userRepository: UserRepository) : ViewModel(){
     private var _users= MutableLiveData<List<User>>()
     var users: LiveData<List<User>> =_users
 
